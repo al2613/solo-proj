@@ -5,7 +5,7 @@
 2. Remove any local instances of node_modules - this is already in the docker container. Do not run `npm install` locally.
 3. `docker build -t facompany/diner .`
 4. `docker run -p 3001:3000 facompany/diner`
-5. To run locally: `npm start`
+5. To run locally: `npm install` and then `npm start`
 
 ## tech stack
 1. React (if more time allowed, would have wanted to refactor using React hooks)
