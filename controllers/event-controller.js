@@ -1,44 +1,35 @@
-const pg = require('pg');
+const Restaurant = require('../models/database.js');
+const mongoose = require('mongoose');
 
-const connection = 'postgres://al2613:Anne0101@localhost/mdn_notes';
-const client = new pg.Client(connection);
-client.connect()
-  .then(() =>console.log ('db connected'))
-  .catch(e => console.error ('connection error', e));
+const dbURL =
+  'mongodb+srv://al2613:1234@cluster0-xmnk0.mongodb.net/codesmith?retryWrites=true';
+mongoose
+  .connect(dbURL, { useNewUrlParser: true })
+  .then(() => console.log('database connected'))
+  .catch(err => console.log(err));
 
 function getEvent(req, res) {
-  console.log(req.body);
-  const query = `SELECT * FROM notes;`;
-  client.query(query, (err, result) => {
-    if (err) throw new Error(err);
-    res.json(result.rows);
+  Restaurant.find({}, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('database encountered an error');
+    }
+    console.log(result);
+    return res.status(200).json(result);
   });
 }
 
 function postEvent(req, res) {
   console.log(req.body);
-
-  const query = `INSERT INTO notes ("topic", "notes") VALUES ('${req.body.topic}', '${req.body.notes}');`;
-
-  client.query(query, (err, result) => {
-    if (err) throw new Error(err);
-    console.log('success!');
-    res.redirect('/');
+  const { name, rating, user_experience } = req.body;
+  Restaurant.create({ name, rating, user_experience }, (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).send('database encountered an error');
+    }
+    console.log(result);
+    return res.status(200).json(result);
   });
 }
 
-function deleteEvent(req, res) {  
-  const query = `DELETE FROM notes WHERE topic = '${req.params.topic}';`;
-  client.query(query, (err, result) => {
-    if (err) throw new Error(err);
-    console.log('deleted!');
-  });
-
-  client.query(`SELECT * FROM notes;`, (err, result) => {
-    if (err) throw new Error(err);
-    console.log('result', result)
-    res.json(result.rows);
-  });
-}
-
-module.exports = { getEvent, postEvent, deleteEvent }
+module.exports = { getEvent, postEvent };

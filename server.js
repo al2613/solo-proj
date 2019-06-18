@@ -8,34 +8,64 @@ const path = require('path');
 const cors = require('cors');
 const request = require('request');
 const eventCtrl = require('./controllers/event-controller');
+var Sentiment = require('sentiment');
+var sentiment = new Sentiment();
 
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
-    extended: true,
-  }),
+    extended: true
+  })
 );
-
+app.use(express.static(`${__dirname}/`));
 app.use(cors());
 
-app.get('/developer/:search', (req, res) => {
+app.get('/rated', eventCtrl.getEvent);
+// build out needed routes
+// using proxy to manage cors warnings and grab data from places API
+app.get('/developer/:search/:lat/:long', (req, res) => {
+  const { search, lat, long } = req.params;
   request(
-    `https://developer.mozilla.org/en-US/search.json?q=${  req.params.search}`,
-    (error, response, body) => {
-      if (!error && response.statusCode === 200) {
-        console.log(body);
-        res.send(JSON.stringify(body));
-      }
-    },
+    `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${search}&key=AIzaSyC0cSTnym-r836gkhPRgER9MWycFRtDMrI&location=${lat},${long}&radius=30`,
+    (err, response, result) => {
+      if (err) return res.status(500).json('internal error');
+      else return res.status(200).json(result);
+    }
   );
 });
 
-app.get('/notes', eventCtrl.getEvent);
+app.get('/restaurant/:id', (req, res) => {
+  request(
+    `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
+      req.params.id
+    }&key=AIzaSyC0cSTnym-r836gkhPRgER9MWycFRtDMrI`,
+    (err, response, result) => {
+      if (err) return res.status(500).json('internal error');
+      else return res.status(200).json(result);
+    }
+  );
+});
 
-app.post('/notes', eventCtrl.postEvent);
+app.get('/sentiment/:id', (req, res) => {
+  request(
+    `https://maps.googleapis.com/maps/api/place/details/json?placeid=${
+      req.params.id
+    }&key=AIzaSyC0cSTnym-r836gkhPRgER9MWycFRtDMrI`,
+    (err, response, result) => {
+      if (err) return res.status(500).json('internal error');
 
-app.delete('/:topic', eventCtrl.deleteEvent);
+      let sentimentResults = [];
 
-app.use(express.static(`${__dirname}/`));
+      let converted = JSON.parse(result);
+      const { reviews } = converted.result;
+      reviews.forEach(review =>
+        sentimentResults.push(sentiment.analyze(review.text))
+      );
+      return res.status(200).json(sentimentResults);
+    }
+  );
+});
+
+app.post('/rated', eventCtrl.postEvent);
 
 app.listen(port, () => console.log(`listening on port ${port}...`));

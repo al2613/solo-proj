@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "start": "node server.js",
+    "start": "nodemon -e ts  --exec \"node server.js\"",
     "webpack": "webpack",
     "lint": "node test/lint.js server.js"
   },
@@ -17,13 +17,18 @@
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.13.1",
+    "google-maps-react": "^2.0.2",
     "local-cors-proxy": "^1.0.2",
+    "mongoose": "^5.5.15",
     "nodemon": "^1.18.9",
     "pg": "^7.8.0",
     "pg-promise": "^8.5.5",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.0.1",
     "request": "^2.88.0",
+    "sentiment": "^5.0.1",
     "webpack": "^4.29.1",
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.1.14"

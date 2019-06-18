@@ -1,70 +1,66 @@
 body {
-    font-family: 'Inconsolata', monospace;
-    background-color: #FFFFF4;
+  font-family: 'Inconsolata', monospace;
+  background-color: #fffff4;
 }
 
 #app {
-    margin: 5%;
+  margin: 5%;
 }
 
 h1 {
-    margin-left: 5px;
-   font-weight: bold;
-   font-size: 45px;
-   color: #026A5F;
-   margin-bottom: 7px;
+  margin-left: 5px;
+  font-weight: bold;
+  font-size: 45px;
+  color: #026a5f;
+  margin-bottom: 7px;
+  text-align: center;
 }
 
-.searchBar {
-   width: 70%;
-   height: 30px;
-   margin: 1em;
-   padding: 0.3em;
-   background-color: #FFFFF2;
-   border: 2px solid #e4e4e4;
+h2 {
+  color: #026a5f;
 }
 
-.dataSubmit{
-   display: flex;
-   margin: 1em;
+.restaurants {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.entry {
+  margin: 2px;
+  width: 30%;
+}
+.reviews {
+  border-bottom: 1px solid black;
+  margin: 5px;
 }
 
-input[type=submit] {
-   cursor:pointer;
-   width: 56px;
-   height: 35px;
-   background: #69C6BC;
-   display: none;
+form {
+  text-align: center;
 }
 
-#description{
-    font-size: 16px;
-    margin-bottom: 5px;
-    margin: 1em;
-}
-#result{
-    font-size: 16px;
-    margin: 1em;
+input {
+  text-align: center;
+  width: 500px;
+  height: 50px;
 }
 
-.noteswrapper {
-    display: flex;
-    flex-direction: row;
+.btn {
+  background-color: #026a5f;
+  height: 30px;
+  margin: 2px;
 }
 
-.rendered-note{
-    padding: 0.5em;
-    border-bottom: 1px solid #e4e4e4;
+.btn--positive {
+  background-color: peachpuff;
+  height: 30px;
 }
 
-.rendered-note > li {
-    list-style-type: none;
+.btn--negative {
+  background-color: maroon;
+  height: 30px;
 }
 
-.rendered-note > button {
-    cursor:pointer;
-    width: 56px;
-    height: 35px;
-    background: #69C6BC;
+.saved {
+  border-bottom: 1px solid black;
 }
-
